@@ -98,10 +98,6 @@ footer {
 }
 
 /* ── Cursor-Animation ────────────────────────────────── */
-.typed-line {
-  white-space: nowrap;
-}
-
 .cursor {
   display: inline-block;
   margin-left: 2px;
