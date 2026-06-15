@@ -97,6 +97,18 @@ footer {
   border-top: 1px solid #00ff4133;
 }
 
+/* ── Cursor-Animation ────────────────────────────────── */
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: blink 1s step-start infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
 /* ── Mobile ──────────────────────────────────────────── */
 @media (max-width: 600px) {
   body {
