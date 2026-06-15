@@ -1,31 +1,49 @@
 document.addEventListener("DOMContentLoaded", () => {
   const h1 = document.querySelector("h1");
-  const originalText = h1.textContent;
 
-  // Ghost-Span: reserviert die volle Breite/Höhe, bleibt unsichtbar
-  const ghost = document.createElement("span");
-  ghost.classList.add("h1-ghost");
-  ghost.textContent = originalText;
+  // Zwei feste Teile – Zeilenumbruch wird dazwischen eingefügt
+  const part1 = "Leandro – Developer";
+  const part2 = "in Training";
+  const fullText = [part1, part2];
 
-  // Typed-Span: liegt absolut über dem Ghost, enthält die Animation
-  const typed = document.createElement("span");
-  typed.classList.add("h1-typed");
+  h1.innerHTML = "";
 
-  h1.textContent = "";
-  h1.appendChild(ghost);
-  h1.appendChild(typed);
-
+  let line = 0;
   let i = 0;
 
   function typeNextChar() {
-    if (i < originalText.length) {
-      typed.innerHTML =
-        originalText.slice(0, i) +
-        '<span style="white-space:nowrap">' +
-          originalText[i] +
-          '<span class="cursor">▮</span>' +
-        '</span>';
+    const currentPart = fullText[line];
+
+    if (i < currentPart.length) {
+      // Aktuell getippten Inhalt aufbauen
+      const typed1 = line === 0 ? currentPart.slice(0, i) : part1;
+      const typed2 = line === 1 ? currentPart.slice(0, i) : "";
+      const currentChar = currentPart[i];
+
+      if (line === 0) {
+        h1.innerHTML =
+          typed1 +
+          '<span style="white-space:nowrap">' +
+            currentChar +
+            '<span class="cursor">▮</span>' +
+          '</span>';
+      } else {
+        h1.innerHTML =
+          part1 + "<br>" +
+          typed2 +
+          '<span style="white-space:nowrap">' +
+            currentChar +
+            '<span class="cursor">▮</span>' +
+          '</span>';
+      }
+
       i++;
+      setTimeout(typeNextChar, 80);
+
+    } else if (line < fullText.length - 1) {
+      // Erste Zeile fertig → zur zweiten wechseln
+      line++;
+      i = 0;
       setTimeout(typeNextChar, 80);
     }
   }
