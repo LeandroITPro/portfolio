@@ -1,3 +1,15 @@
+/* ── Variables ───────────────────────────────────────── */
+:root {
+  --bg: #0a0a0a;
+  --green: #00ff41;
+  --cyan: #00ffff;
+  --magenta: #ff00ff;
+  --yellow: #ffeb3b;
+  --orange: #ff9500;
+  --text-dim: rgba(255, 255, 255, 0.5);
+  --border-dim: rgba(0, 255, 65, 0.15);
+}
+
 /* ── Reset ───────────────────────────────────────────── */
 * {
   box-sizing: border-box;
@@ -7,10 +19,11 @@
 
 /* ── Base ────────────────────────────────────────────── */
 body {
-  background-color: #0a0a0a;
-  color: #00ff41;
+  background-color: var(--bg);
+  color: var(--green);
   font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "Courier New", monospace;
   padding: 2rem;
+  padding-top: 3.5rem;
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.6;
@@ -18,13 +31,35 @@ body {
 
 /* ── Selection ───────────────────────────────────────── */
 ::selection {
-  background-color: #00ff41;
-  color: #0a0a0a;
+  background-color: var(--green);
+  color: var(--bg);
 }
+
+/* ── Status Bar ──────────────────────────────────────── */
+.statusbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.95);
+  border-bottom: 1px solid var(--border-dim);
+  padding: 0.4rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "Courier New", monospace;
+  font-size: 0.75rem;
+  backdrop-filter: blur(4px);
+}
+
+.sb-left  { color: var(--green); }
+.sb-mid   { color: var(--cyan); letter-spacing: 0.05em; }
+.sb-right { color: var(--text-dim); }
 
 /* ── Links ───────────────────────────────────────────── */
 a {
-  color: #00ff41;
+  color: var(--green);
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -37,7 +72,7 @@ a:hover {
 header {
   text-align: center;
   margin-top: 4rem;
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
 }
 
 /* ── Headings ────────────────────────────────────────── */
@@ -51,12 +86,22 @@ h2 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #00ff4133;
+  border-bottom: 1px solid var(--border-dim);
 }
 
-h2::before {
-  content: "> ";
-}
+/* Per-section h2 accent colors */
+#about h2        { color: var(--cyan); }
+#skills h2       { color: var(--magenta); }
+#projects h2     { color: var(--yellow); }
+#certificates h2 { color: var(--orange); }
+#contact h2      { color: var(--green); }
+
+/* Per-section h2 prefixes */
+#about h2::before        { content: "> ~/about "; }
+#skills h2::before       { content: "> ~/skills "; }
+#projects h2::before     { content: "> ~/projects "; }
+#certificates h2::before { content: "> ~/certs "; }
+#contact h2::before      { content: "> ~/contact "; }
 
 /* ── Paragraphs ──────────────────────────────────────── */
 p {
@@ -70,34 +115,121 @@ header p {
   font-size: 1.1rem;
 }
 
-/* ── Sections / Footer spacing ───────────────────────── */
+/* ── Section Cards ───────────────────────────────────── */
 section,
-header,
-footer {
-  margin-bottom: 4rem;
+#contact {
+  border: 1px solid var(--border-dim);
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.08);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-/* ── Skills list ─────────────────────────────────────── */
+#about:hover        { border-color: var(--cyan);    box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);  transform: translateY(-2px); }
+#skills:hover       { border-color: var(--magenta); box-shadow: 0 0 30px rgba(255, 0, 255, 0.15);  transform: translateY(-2px); }
+#projects:hover     { border-color: var(--yellow);  box-shadow: 0 0 30px rgba(255, 235, 59, 0.15); transform: translateY(-2px); }
+#certificates:hover { border-color: var(--orange);  box-shadow: 0 0 30px rgba(255, 149, 0, 0.15);  transform: translateY(-2px); }
+#contact:hover      { border-color: var(--green);   box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);    transform: translateY(-2px); }
+
+/* ── Skills Tags ─────────────────────────────────────── */
 #skills ul {
   list-style: none;
   padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
 }
 
 #skills ul li {
+  border: 1px solid var(--magenta);
+  border-radius: 3px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--magenta);
+  cursor: default;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#skills ul li:hover {
+  background: var(--magenta);
+  color: var(--bg);
+}
+
+/* ── Project Card ────────────────────────────────────── */
+.project-card {
+  border: 1px solid rgba(255, 235, 59, 0.2);
+  border-radius: 4px;
+  padding: 1.2rem;
+  margin-top: 0.5rem;
+  transition: border-color 0.25s ease;
+}
+
+.project-card:hover {
+  border-color: var(--yellow);
+}
+
+.project-card h3 {
+  color: var(--yellow);
+  font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
 
-#skills ul li::before {
-  content: "▸ ";
+.project-desc {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
 }
 
-/* ── Footer ──────────────────────────────────────────── */
-footer {
-  padding-top: 2rem;
-  border-top: 1px solid #00ff4133;
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
 }
 
-/* ── Cursor-Animation ────────────────────────────────── */
+.project-tags span {
+  border: 1px solid rgba(255, 235, 59, 0.4);
+  border-radius: 3px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  color: var(--yellow);
+  cursor: default;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.project-tags span:hover {
+  background: var(--yellow);
+  color: var(--bg);
+}
+
+.project-card a {
+  color: var(--yellow);
+  font-size: 0.9rem;
+}
+
+.project-card a:hover {
+  color: #fff;
+}
+
+/* ── Footer Contact Links ────────────────────────────── */
+.contact-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.contact-links a {
+  color: var(--green);
+}
+
+.contact-links a:hover {
+  color: #fff;
+}
+
+/* ── Cursor Animation ────────────────────────────────── */
 .cursor {
   display: inline-block;
   margin-left: 2px;
@@ -113,9 +245,20 @@ footer {
 @media (max-width: 600px) {
   body {
     padding: 1rem;
+    padding-top: 3rem;
   }
 
   h1 {
     font-size: 1.8rem;
+  }
+
+  .statusbar {
+    padding: 0.35rem 1rem;
+    font-size: 0.65rem;
+  }
+
+  .contact-links {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 }
