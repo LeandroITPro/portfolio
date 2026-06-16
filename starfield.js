@@ -73,9 +73,13 @@
     });
   }
 
-  // ── Scroll-Offset ──────────────────────────────────────
-  let scrollY = window.scrollY;
-  window.addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
+  // ── Scroll-Offset (nur Desktop — Mobile-Viewport springt beim Scrollen) ──
+  const disableParallax = window.innerWidth <= 768;
+  let scrollY = 0;
+  if (!disableParallax) {
+    scrollY = window.scrollY;
+    window.addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
+  }
 
   // ── Resize ─────────────────────────────────────────────
   let resizeTimer;
