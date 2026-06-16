@@ -10,6 +10,17 @@
   --border-dim: rgba(0, 255, 65, 0.15);
 }
 
+/* ── Starfield Canvas ────────────────────────────────── */
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* ── Reset ───────────────────────────────────────────── */
 * {
   box-sizing: border-box;
