@@ -42,13 +42,20 @@
     { count: isMobile ? 10 : 30,  sizeMin: 1.5, sizeMax: 3.0, opMin: 0.30, opMax: 0.80, drift: 0.10, parallax: 0.22 },
   ];
 
+  // ── Stabile Canvas-Höhe ────────────────────────────────
+  // Nutze screen.height als stabilen Anker — ändert sich nie beim Adressleisten-Wackeln.
+  // Das Canvas ist größer als nötig, aber position:fixed + CSS-Clipping übernimmt die Darstellung.
+  function getStableHeight() {
+    return window.screen.height;
+  }
+
   // ── Sterne generieren ──────────────────────────────────
   let W, H;
   let stars = [];
 
   function generateStars() {
     W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+    H = canvas.height = getStableHeight();
     stars = [];
 
     LAYERS.forEach((layer, layerIdx) => {
@@ -81,11 +88,20 @@
     window.addEventListener("scroll", () => { scrollY = window.scrollY; }, { passive: true });
   }
 
-  // ── Resize ─────────────────────────────────────────────
-  let resizeTimer;
+  // ── Resize: nur bei Breiten- oder Orientierungsänderung ──
+  let lastWidth = window.innerWidth;
   window.addEventListener("resize", () => {
+    const newWidth = window.innerWidth;
+    if (newWidth !== lastWidth) {
+      lastWidth = newWidth;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(generateStars, 150);
+    }
+    // Höhen-Änderungen (Adressleiste) werden ignoriert
+  });
+  window.addEventListener("orientationchange", () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(generateStars, 150);
+    resizeTimer = setTimeout(generateStars, 300);
   });
 
   // ── Render-Loop ────────────────────────────────────────
